@@ -1,0 +1,16 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#backgroundImg {
+    background-image: url("bg.jpg");
+    /* background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh; */
+}
+
+body {
+    background-color: antiquewhite;
+}
