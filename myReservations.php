@@ -36,7 +36,7 @@ include "connection.php";
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a class="nav-link text-white" aria-current="page" href="index.php">Home</a>
-                            <a class="nav-link text-white" href="index.php">Contact</a>
+                            <a class="nav-link text-white" href="member.php">Contact</a>
                             <a class="nav-link text-white" href="aboutVisitor.php">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,22 +104,26 @@ include "connection.php";
 
         <div class="container">
             <table class="table">
-                <tr>
-                    <th>test</th>
-                    <th>test</th>
-                    <th>test</th>
-                </tr>
-                <tr>
-                    <td>testttt</td>
-                    <td>testttt</td>
-                    <td>testttt</td>
-                </tr>
-                <tr>
-                    <td>testttt</td>
-                    <td>testttt</td>
-                    <td>testttt</td>
-                </tr>
+
+                <thead>
+                    <tr>
+                        <th>test</th>
+                        <th>test</th>
+                        <th>test</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php ?>
+                    <tr>
+                        <td>testttt</td>
+                        <td>testttt</td>
+                        <td>testttt</td>
+                    </tr>
+                </tbody>
+
             </table>
+
         </div>
 
     </main>

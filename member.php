@@ -35,7 +35,7 @@ include "connection.php";
                     </button>
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
-                            <a class="nav-link text-white" aria-current="page" href="index.php">Home</a>
+                            <a class="nav-link text-white" aria-current="page" href="member.php?id=<?php $_GET["id"] ?>">Home</a>
                             <a class="nav-link text-white" href="index.php">Contact</a>
                             <a class="nav-link text-white" href="aboutVisitor.php">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
