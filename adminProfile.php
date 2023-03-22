@@ -1,5 +1,6 @@
 <?php
 
+ob_start();
 include "connection.php";
 
 ?>
@@ -62,7 +63,7 @@ include "connection.php";
                             ?>
                         </button>
                         <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="adminProfile.php?id=<?php echo $id; ?>">Profile</a></li>
+                            <li><a class="dropdown-item" href="adminProfile.php?id=<?php echo $id; ?>">Profile</a></li>
                             <li><a class="dropdown-item" href="addAdmins.php?id=<?php echo $id; ?>">Add admins</a></li>
                             <li><a class="dropdown-item" href="addItems.php?id=<?php echo $id; ?>">Add an item</a></li>
                             <li><a class="dropdown-item" href="borrowReturn.php?id=<?php echo $id; ?>">Borrowings & Returnings</a></li>
@@ -104,105 +105,66 @@ include "connection.php";
 
         <div class="down-arrow" onclick="scrollDown()"></div>
 
+        <!-- Container -->
+
         <!-- ::::::::::::::::::::::::::::::::::: Cards container (Search, Cards, Pagination) ::::::::::::::::::::::::::::::::::: -->
 
-        <div class="container">
-            <form method="POST">
-                <div class="input-group m-5">
-                    <input type="search" name="search" id="search" class="form-control" placeholder="Search">
-                    <select class="border" name="filter_search">
-                        <option value="All">All</option>
-                        <option value="Books">Books</option>
-                        <option value="Music">Music</option>
-                        <option value="Audio books">Audio books</option>
-                        <option value="Movies">Movies</option>
-                        <option value="Comics">Comics</option>
-                    </select>
-                    <button type="submit" class="btn searchbtn border" title="Search"><i class="fas fa-search filtersearch"></i></button>
+        <div class="container px-5">
+            <form action="member.php?id=<?php echo $id; ?>" method="POST" class="row g-3 needs-validation px-5 mt-1">
+
+                <h3>Update your information</h3>
+
+                <div class="col-md-4">
+                    <label for="fullName" class="form-label">Full name</label>
+                    <input type="text" class="form-control" placeholder="Current one: <?php echo $memberDetails['Full_Name']; ?>" id="fullName" name="fullName">
                 </div>
+                <div class="col-md-4">
+                    <label for="nickName" class="form-label">Nickname</label>
+                    <input type="text" class="form-control" placeholder="Current one: <?php echo $memberDetails['Nickname']; ?>" id="nickName" name="nickName">
+                </div>
+                <div class="col-md-4">
+                    <label for="phoneNumber" class="form-label">Phone number</label>
+                    <input type="number" class="form-control" placeholder="Current one: <?php echo $memberDetails['Phone']; ?>" id="phoneNumber" name="phoneNumber" aria-describedby="inputGroupPrepend">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="occupation" class="form-label">Occupation</label>
+                    <select class="form-select" id="occupation" name="occupation">
+                        <option value="" disabled selected>Choose option</option>
+                        <option value="Etudiant">Etudiant</option>
+                        <option value="Fonctionnaire">Fonctionnaire</option>
+                        <option value="Employe">Employe</option>
+                        <option value="Femme au foyer">Femme au foyer</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="CINnumber" class="form-label">C.I.N</label>
+                    <input type="text" class="form-control" placeholder="Current one: <?php echo $memberDetails['CIN']; ?>" id="CINnumber" name="laCarte">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" placeholder="Current one: <?php echo $memberDetails['Password']; ?>" id="password" name="password">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" placeholder="Current one: <?php echo $memberDetails['Address']; ?>" id="address" name="addressLocal">
+                </div>
+                <div class="col-md-6">
+                    <label for="birthDate" class="form-label">Birth date</label>
+                    <input type="date" class="form-control" id="birthDate" name="birthDate">
+                </div>
+
+                <div class="col-12">
+                    <button class="btn btn-primary col-12 mb-3" type="submit" name="submit">Save Changes</button>
+                </div>
+
             </form>
         </div>
 
-        <div class="container text-center">
-
-            <?php
-
-            $cards = 6;
-
-            if (isset($_GET["page"])) {
-                $page = $_GET["page"];
-            } else {
-                $page = 1;
-            }
-
-            $starting = ($page - 1) * $cards;
-
-            if (isset($_POST['search'])) {
-
-                $searched_value = $_POST['search'];
-
-                if ($_POST['filter_search'] == 'All') {
-                    $statement = $conn->prepare("SELECT * FROM `item` WHERE Title LIKE '{$searched_value}%'"); // add ((( LIMIT $starting, $cards ))) for pagination
-                } elseif ($_POST['filter_search'] == 'Books') {
-                    $statement = $conn->prepare("SELECT * FROM `item` WHERE Category_Code = 1 AND Title LIKE '{$searched_value}%'");
-                } elseif ($_POST['filter_search'] == 'Music') {
-                    $statement = $conn->prepare("SELECT * FROM `item` WHERE Category_Code = 2 AND Title LIKE '{$searched_value}%'");
-                } elseif ($_POST['filter_search'] == 'Audio books') {
-                    $statement = $conn->prepare("SELECT * FROM `item` WHERE Category_Code = 3 AND Title LIKE '{$searched_value}%'");
-                } elseif ($_POST['filter_search'] == 'Movies') {
-                    $statement = $conn->prepare("SELECT * FROM `item` WHERE Category_Code = 4 AND Title LIKE '{$searched_value}%'");
-                } elseif ($_POST['filter_search'] == 'Comics') {
-                    $statement = $conn->prepare("SELECT * FROM `item` WHERE Category_Code = 5 AND Title LIKE '{$searched_value}%'");
-                }
-            } else {
-                $statement = $conn->prepare("SELECT * FROM `item`");
-            }
-
-            $statement->execute();
-            $items = $statement->fetchAll();
-
-            if ($items == null) {
-                echo "<h3 id='noResults' class='mb-5'>Unfortunately, there are no matches for your search</h3>";
-                $statement = $conn->prepare("SELECT * FROM item WHERE 1 = 0");
-                $statement->execute();
-                $items = $statement->fetchAll();
-            }
-
-            foreach ($items as $item) {
-
-            ?>
-
-                <div class="card d-inline-block mb-5 mx-2">
-                    <div class="row">
-                        <div class="col-md-4 images-container">
-                            <img src="<?php echo $item['Cover_Image']; ?>" class="img-fluid rounded-start" alt="Card image">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body text-start" <?php $id = $item['Item_Code']; ?>>
-                                <h5 class="card-title"><span class="fw-bold" style="max-width: 600px;">Title:</span> <?php echo $item['Title']; ?></h5>
-                                <p class="card-text">
-                                    <span class="fw-bold">Status:</span> <?php echo $item['Status']; ?><br>
-                                    <span class="fw-bold">Author:</span> <?php echo $item['Author_Name']; ?><br>
-                                    <span class="fw-bold">Category:</span> <?php
-                                                                            $categoryId = $item['Category_Code'];
-                                                                            $statement = $conn->prepare("SELECT * FROM `category` WHERE `Category_Code` = $categoryId");
-                                                                            $statement->execute();
-                                                                            $category = $statement->fetch();
-                                                                            echo $category['Category_Name'];
-                                                                            ?>
-                                </p>
-                                <a class="btn border rounded-pill px-5" href="details.php?id=<?php echo $id; ?>">Details</a>
-                                <button class="btn btn-primary border rounded-pill px-5">Reserve</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            <?php }; ?>
-
-        </div>
-
-        <!-- ::::::::::::::::::::::::::::::::::: Footer (Copyright, social media icons) ::::::::::::::::::::::::::::::::::: -->
+        <!-- Footer -->
 
         <?php include "footer.php" ?>
 

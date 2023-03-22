@@ -29,14 +29,14 @@ include "connection.php";
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid">
                     <img src="images/logo.png" class="d-inline-block align-top mx-3 logo" alt="logo">
-                    <a class="navbar-brand text-white" href="index.php">Solibrary</a>
+                    <a class="navbar-brand text-white">Solibrary</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a class="nav-link text-white" aria-current="page" href="member.php?id=<?php $_GET["id"] ?>">Home</a>
-                            <a class="nav-link text-white" href="index.php">Contact</a>
+                            <a class="nav-link text-white" href="member.php?id=<?php $_GET["id"] ?>">Contact</a>
                             <a class="nav-link text-white" href="aboutVisitor.php">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,7 +105,7 @@ include "connection.php";
         <!-- ::::::::::::::::::::::::::::::::::: Cards container (Search, Cards, Pagination) ::::::::::::::::::::::::::::::::::: -->
 
         <div class="container px-5">
-            <form action="member.php?id=<?php echo $id; ?>" method="POST" class="row g-3 needs-validation px-5 mt-1">
+            <form method="POST" class="row g-3 needs-validation px-5 mt-1">
 
             <h3>Update your information</h3>
 
@@ -153,11 +153,32 @@ include "connection.php";
                 </div>
 
                 <div class="col-12">
-                    <button class="btn btn-primary col-12 mb-3" type="submit" name="submit">Save Changes</button>
+                    <button class="btn btn-primary col-12 mb-3" type="submit" name="saveChanges">Save Changes</button>
                 </div>
 
             </form>
         </div>
+
+        <?php
+
+            if (isset($_POST["saveChanges"])) {
+
+                $Full_Name = $_POST["fullName"];
+                $Nickname = $_POST["nickName"];
+                $Password = $_POST["password"];
+                $address = $_POST["addressLocal"];
+                $Phone = $_POST["phoneNumber"];
+                $LaCarte = $_POST["laCarte"];
+                $Birth_date = $_POST["birthDate"];
+
+                $sqlQuery = "UPDATE `members` SET `Full_Name` = COALESCE('$Full_Name', `Full_Name`), `Nickname` = COALESCE('$Nickname', `Nickname`), `Password` = COALESCE('$Password', `Password`), `Address` = COALESCE('$address', `Address`), `Phone` = COALESCE('$Phone', `Phone`), `CIN` = COALESCE('$LaCarte', `CIN`), `Birth_date` = COALESCE('$Birth_date', `Birth_date`) WHERE id = $id";
+
+                $statement = $conn->prepare($sqlQuery);
+                $statement->execute();
+
+            }
+
+        ?>
 
         <!-- ::::::::::::::::::::::::::::::::::: Footer (Copyright, social media icons) ::::::::::::::::::::::::::::::::::: -->
 
