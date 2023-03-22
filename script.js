@@ -1,7 +1,6 @@
 const header = document.querySelector(".fixed-top");
 
 window.addEventListener("scroll", () => {
-
   if (window.scrollY > 500) {
     header.classList.add("scrolledBg");
   } else {
@@ -11,25 +10,28 @@ window.addEventListener("scroll", () => {
 
 function scrollDown() {
   window.scrollBy(0, window.innerHeight);
-};
+}
 
 (function () {
-  'use strict'
+  "use strict";
 
-  let forms = document.querySelectorAll('.needs-validation')
+  let forms = document.querySelectorAll(".needs-validation");
 
-  Array.prototype.slice.call(forms)
-    .forEach(function (form) {
-      form.addEventListener('submit', function (event) {
+  Array.prototype.slice.call(forms).forEach(function (form) {
+    form.addEventListener(
+      "submit",
+      function (event) {
         if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
+          event.preventDefault();
+          event.stopPropagation();
         }
 
-        form.classList.add('was-validated')
-      }, false)
-    })
-});
+        form.classList.add("was-validated");
+      },
+      false
+    );
+  });
+})();
 
 // let errorArray = [];
 
@@ -52,3 +54,25 @@ function scrollDown() {
 
 //   }
 // };
+
+document.addEventListener('DOMContentLoaded', function () {
+  let reserveButton = document.getElementById('reserve');
+  reserveButton.addEventListener('click', function () {
+    reserveButton.classList.add('onclic');
+    validate();
+  });
+
+  function validate() {
+    setTimeout(function () {
+      reserveButton.classList.remove('onclic');
+      reserveButton.classList.add('validate');
+      callback();
+    }, 2250);
+  }
+
+  function callback() {
+    setTimeout(function () {
+      reserveButton.classList.remove('validate');
+    }, 1250);
+  }
+});

@@ -62,7 +62,7 @@ include "connection.php";
                             ?>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="memberProfile.php?id=<?php echo $id; ?>">Profile</a></li>
                             <li><a class="dropdown-item" href="myReservations.php?id=<?php echo $id; ?>">My Reservations</a></li>
                             <li><a class="dropdown-item" href="index.php">Log out</a></li>
                         </ul>
@@ -166,9 +166,6 @@ include "connection.php";
                 $items = $statement->fetchAll();
             }
 
-            $rows = count($items);
-            $number_of_pages = ceil($rows / $cards);
-
             foreach ($items as $item) {
 
             ?>
@@ -193,7 +190,7 @@ include "connection.php";
                                                                             ?>
                                 </p>
                                 <a class="btn border rounded-pill px-5" href="details.php?id=<?php echo $id; ?>">Details</a>
-                                <button class="btn btn-primary border rounded-pill px-5">Reserve</button>
+                                <button class="btn btn-primary border rounded-pill px-5" id="reserve">Reserve</button>
                             </div>
                         </div>
                     </div>
@@ -201,14 +198,6 @@ include "connection.php";
 
             <?php }; ?>
 
-        </div>
-
-        <div class="text-center">
-            <?php
-            for ($i = 1; $i <= $number_of_pages; $i++) {
-                echo "<a class='btn btn-primary mx-1 mb-3' href='index.php?page=" . $i . "'>$i</a>";
-            }
-            ?>
         </div>
 
         <!-- ::::::::::::::::::::::::::::::::::: Footer (Copyright, social media icons) ::::::::::::::::::::::::::::::::::: -->
@@ -220,6 +209,7 @@ include "connection.php";
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/165265fe22.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
 
 </body>

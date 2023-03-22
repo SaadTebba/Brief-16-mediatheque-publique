@@ -11,7 +11,7 @@ include "connection.php";
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brief-16 - Admin</title>
+    <title>Brief-16</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,8 +35,8 @@ include "connection.php";
                     </button>
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
-                            <a class="nav-link text-white" aria-current="page" href="index.php">Home</a>
-                            <a class="nav-link text-white" href="member.php">Contact</a>
+                            <a class="nav-link text-white" aria-current="page" href="member.php?id=<?php $_GET["id"] ?>">Home</a>
+                            <a class="nav-link text-white" href="index.php">Contact</a>
                             <a class="nav-link text-white" href="aboutVisitor.php">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,9 +57,7 @@ include "connection.php";
                             $statement->execute();
                             $memberDetails = $statement->fetch();
 
-                            $nickname = $memberDetails['Nickname'];
-
-                            echo $nickname;
+                            echo $memberDetails['Nickname'];
 
                             ?>
                         </button>
@@ -104,54 +102,75 @@ include "connection.php";
 
         <div class="down-arrow" onclick="scrollDown()"></div>
 
-        <div class="container">
-            <table class="table border mt-3">
+        <!-- ::::::::::::::::::::::::::::::::::: Cards container (Search, Cards, Pagination) ::::::::::::::::::::::::::::::::::: -->
 
-                <thead>
-                    <tr>
-                        <th>Item reserved</th>
-                        <th>Reservation date</th>
-                        <th>Reservation expiration date</th>
-                    </tr>
-                </thead>
+        <div class="container px-5">
+            <form action="member.php?id=<?php echo $id; ?>" method="POST" class="row g-3 needs-validation px-5 mt-1">
 
-                <tbody>
+            <h3>Update your information</h3>
 
-                    <?php
+                <div class="col-md-4">
+                    <label for="fullName" class="form-label">Full name</label>
+                    <input type="text" class="form-control" placeholder="Current one: <?php echo $memberDetails['Full_Name']; ?>" id="fullName" name="fullName">
+                </div>
+                <div class="col-md-4">
+                    <label for="nickName" class="form-label">Nickname</label>
+                    <input type="text" class="form-control" placeholder="Current one: <?php echo $memberDetails['Nickname']; ?>" id="nickName" name="nickName">
+                </div>
+                <div class="col-md-4">
+                    <label for="phoneNumber" class="form-label">Phone number</label>
+                    <input type="number" class="form-control" placeholder="Current one: <?php echo $memberDetails['Phone']; ?>" id="phoneNumber" name="phoneNumber" aria-describedby="inputGroupPrepend">
+                </div>
 
-                    $statement = $conn->prepare("SELECT * FROM `reservation` WHERE `Nickname` = '$nickname'");
-                    $statement->execute();
-                    $reservations = $statement->fetchAll();
+                <div class="col-md-3">
+                    <label for="occupation" class="form-label">Occupation</label>
+                    <select class="form-select" id="occupation" name="occupation">
+                        <option value="" disabled selected>Choose option</option>
+                        <option value="Etudiant">Etudiant</option>
+                        <option value="Fonctionnaire">Fonctionnaire</option>
+                        <option value="Employe">Employe</option>
+                        <option value="Femme au foyer">Femme au foyer</option>
+                    </select>
+                </div>
 
-                    foreach ($reservations as $reservation) {
+                <div class="col-md-3">
+                    <label for="CINnumber" class="form-label">C.I.N</label>
+                    <input type="text" class="form-control"placeholder="Current one: <?php echo $memberDetails['CIN']; ?>"  id="CINnumber" name="laCarte">
+                </div>
 
-                        echo "<tr>";
-                        echo "<td>";
-                        $itemCode = $reservation['Item_Code'];
-                        $statement = $conn->prepare("SELECT * FROM `item` WHERE `Item_Code` = '$itemCode'");
-                        $statement->execute();
-                        $item = $statement->fetch();
-                        echo $item['Title'] . "</td>";
-                        echo "<td>" . $reservation['Reservation_Date'] . "</td>";
-                        echo "<td>" . $reservation['Reservation_Expiration_Date'] . "</td>";
-                        echo "</tr>";
-                    }
+                <div class="col-md-6">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" placeholder="Current one: <?php echo $memberDetails['Password']; ?>" id="password" name="password">
+                </div>
 
+                <div class="col-md-6">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" placeholder="Current one: <?php echo $memberDetails['Address']; ?>" id="address" name="addressLocal">
+                </div>
+                <div class="col-md-6">
+                    <label for="birthDate" class="form-label">Birth date</label>
+                    <input type="date" class="form-control" id="birthDate" name="birthDate">
+                </div>
 
-                    ?>
-                </tbody>
+                <div class="col-12">
+                    <button class="btn btn-primary col-12 mb-3" type="submit" name="submit">Save Changes</button>
+                </div>
 
-            </table>
-
+            </form>
         </div>
+
+        <!-- ::::::::::::::::::::::::::::::::::: Footer (Copyright, social media icons) ::::::::::::::::::::::::::::::::::: -->
 
         <?php include "footer.php" ?>
 
     </main>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/165265fe22.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
+
 </body>
 
 </html>

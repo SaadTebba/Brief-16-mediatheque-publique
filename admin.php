@@ -169,9 +169,6 @@ include "connection.php";
                 $items = $statement->fetchAll();
             }
 
-            $rows = count($items);
-            $number_of_pages = ceil($rows / $cards);
-
             foreach ($items as $item) {
 
             ?>
@@ -204,14 +201,6 @@ include "connection.php";
 
             <?php }; ?>
 
-        </div>
-
-        <div class="text-center">
-            <?php
-            for ($i = 1; $i <= $number_of_pages; $i++) {
-                echo "<a class='btn btn-primary mx-1 mb-3' href='index.php?page=" . $i . "'>$i</a>";
-            }
-            ?>
         </div>
 
         <!-- ::::::::::::::::::::::::::::::::::: Footer (Copyright, social media icons) ::::::::::::::::::::::::::::::::::: -->

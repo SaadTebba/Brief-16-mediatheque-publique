@@ -100,6 +100,7 @@ body {
 .indexReserve {
     background-color: #0C1019;
 }
+
 .indexReserve:hover {
     background-color: #232938;
     border: #0C1019 1px solid;
@@ -125,4 +126,70 @@ body {
 
 .signinhere {
     cursor: pointer;
+}
+
+/* Reserve click button */
+
+#reserve {
+    outline: none;
+    height: 40px;
+    text-align: center;
+    border-radius: 40px;
+    background: #fff;
+    border: 2px solid #ffc107;
+    color: #ffc107;
+    letter-spacing: 1px;
+    text-shadow: 0;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+#reserve:hover {
+    color: white;
+    background: #ffc107;
+}
+
+#reserve:active {
+    letter-spacing: 2px;
+}
+
+.onclic {
+    width: 40px;
+    border-color: #bbbbbb;
+    border-width: 3px;
+    font-size: 0;
+    border-left-color: #ffc107;
+    animation: rotating 2s 0.25s linear infinite;
+}
+
+.onclic:after {
+    content: "";
+}
+
+.onclic:hover {
+    color: #ffc107;
+    background: white;
+}
+
+.validate {
+    font-size: 13px;
+    color: white;
+    background: #ffc107;
+}
+
+.validate:after {
+    font-family: 'FontAwesome';
+    content: "\f00c";
+}
+
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
