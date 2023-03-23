@@ -1,6 +1,7 @@
 <?php
 
 include "connection.php";
+$id = $_GET['id'];
 
 ?>
 
@@ -29,15 +30,15 @@ include "connection.php";
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid">
                     <img src="images/logo.png" class="d-inline-block align-top mx-3 logo" alt="logo">
-                    <a class="navbar-brand text-white" href="index.php">Solibrary</a>
+                    <a class="navbar-brand text-white">Solibrary</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
-                            <a class="nav-link text-white" aria-current="page" href="index.php">Home</a>
+                            <a class="nav-link text-white" aria-current="page" href="admin.php?id=<?php echo $id; ?>">Home</a>
                             <a class="nav-link text-white" href="index.php">Contact</a>
-                            <a class="nav-link text-white" href="aboutVisitor.php">About</a>
+                            <a class="nav-link text-white" href="aboutMembers.php?id=<?php echo $id; ?>">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon text-white"></span>
@@ -50,8 +51,6 @@ include "connection.php";
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle bg-transparent border-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <?php
-
-                            $id = $_GET['id'];
 
                             $statement = $conn->prepare("SELECT * FROM `members` WHERE id = $id");
                             $statement->execute();

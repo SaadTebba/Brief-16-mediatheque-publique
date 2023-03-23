@@ -1,4 +1,9 @@
-<?php include "connection.php"; ?>
+<?php
+
+include "connection.php";
+$id = $_GET['id'];
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,9 +32,9 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link text-white" aria-current="page" href="member.php?id=<?php $_GET["id"] ?>">Home</a>
+                        <a class="nav-link text-white" aria-current="page" href="member.php?id=<?php echo $id; ?>">Home</a>
                         <a class="nav-link text-white" href="index.php">Contact</a>
-                        <a class="nav-link text-white" href="aboutVisitor.php">About</a>
+                        <a class="nav-link text-white" href="aboutMembers.php?id=<?php echo $id; ?>">About</a>
                         <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon text-white"></span>
@@ -42,8 +47,6 @@
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle bg-transparent border-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <?php
-
-                        $id = $_GET['id'];
 
                         $statement = $conn->prepare("SELECT * FROM `members` WHERE id = $id");
                         $statement->execute();
