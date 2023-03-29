@@ -1,6 +1,5 @@
 <?php
 
-ob_start();
 include "connection.php";
 $id = $_GET['id'];
 
@@ -32,7 +31,7 @@ $id = $_GET['id'];
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid">
                     <img src="images/logo.png" class="d-inline-block align-top mx-3 logo" alt="logo">
-                    <a class="navbar-brand text-white" href="index.php">Solibrary</a>
+                    <a class="navbar-brand text-white">Solibrary</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -40,7 +39,7 @@ $id = $_GET['id'];
                         <div class="navbar-nav">
                             <a class="nav-link text-white" aria-current="page" href="admin.php?id=<?php echo $id; ?>">Home</a>
                             <a class="nav-link text-white" href="index.php">Contact</a>
-                            <a class="nav-link text-white" href="aboutMembers.php">About</a>
+                            <a class="nav-link text-white" href="aboutMembers.php?id=<?php echo $id; ?>">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon text-white"></span>
@@ -105,63 +104,97 @@ $id = $_GET['id'];
 
         <div class="down-arrow" onclick="scrollDown()"></div>
 
-        <!-- Container -->
+        <!-- ::::::::::::::::::::::::::::::::::: Cards container (Search, Cards, Pagination) ::::::::::::::::::::::::::::::::::: -->
 
-        <div class="container">
+        <div class="container px-5">
 
-            <table class="table border mt-3">
+            <form method="POST" class="row g-3 needs-validation px-5 mt-1">
 
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nickname</th>
-                        <th>Full Name</th>
-                        <th>Email</th>
-                        <th>Creation Date</th>
-                        <th>Add as admin</th>
-                    </tr>
-                </thead>
+                <h3>Add new item</h3>
 
-                <tbody>
+                <div class="col-md-4">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title">
+                </div>
+                <div class="col-md-4">
+                    <label for="Author_Name" class="form-label">Author Name</label>
+                    <input type="text" class="form-control" id="Author_Name" name="Author_Name">
+                </div>
+                <div class="col-md-4">
+                    <label for="Cover_Image" class="form-label">Cover image</label>
+                    <input type="file" class="form-control" id="Cover_Image" name="Cover_Image" aria-describedby="inputGroupPrepend">
+                </div>
 
-                    <?php
-                    $statement = $conn->prepare("SELECT * FROM `members` WHERE `Admin` = 0");
-                    $statement->execute();
-                    $members = $statement->fetchAll();
+                <div class="col-md-4">
+                    <label for="state" class="form-label">State</label>
+                    <select class="form-select" id="state" name="state">
+                        <option value="" disabled selected>Choose option</option>
+                        <option value="New">New</option>
+                        <option value="Used">Used</option>
+                        <option value="Used Like New">Used Like New</option>
+                        <option value="Used Like Old">Used Like Old</option>
+                        <option value="Broken">Broken</option>
+                    </select>
+                </div>
 
-                    foreach ($members as $member) {
+                <div class="col-md-4">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="" disabled selected>Choose option</option>
+                        <option value="Available">Available</option>
+                        <option value="Reserved">Reserved</option>
+                        <option value="Borrowed">Borrowed</option>
+                    </select>
+                </div>
 
-                        $idMember = $member['id'];
-                        echo "<tr>";
-                        echo "<td>" . $idMember . "</td>";
-                        echo "<td>" . $member['Nickname'] . "</td>";
-                        echo "<td>" . $member['Full_Name'] . "</td>";
-                        echo "<td>" . $member['Email'] . "</td>";
-                        echo "<td>" . $member['Creation_Date'] . "</td>";
-                        echo "<td><form method='POST'><input type='hidden' name='idMember' value='$idMember'><button class='btn btn-primary' name='addAdmin'>Add as admin</button></form></td>";
-                        echo "</tr>";
-                    }
+                <div class="col-md-4">
+                    <label for="category" class="form-label">Category</label>
+                    <select class="form-select" id="category" name="category">
+                        <option value="" disabled selected>Choose option</option>
+                        <option value="Book">Book</option>
+                        <option value="Music">Music</option>
+                        <option value="Audio book">Audio book</option>
+                        <option value="Movie">Movie</option>
+                        <option value="Comic">Comic</option>
+                    </select>
+                </div>
 
-                    if (isset($_POST["addAdmin"])) {
+                <div class="col-md-12">
+                    <label for="Edition_Date" class="form-label">Edition Date</label>
+                    <input type="date" class="form-control" id="Edition_Date" name="Edition_Date">
+                </div>
 
-                        $idMember = $_POST["idMember"];
-                        $statement = $conn->prepare("UPDATE `members` SET `Admin` = 1 WHERE `id` = '$idMember'");
-                        $statement->execute();
+                <div class="col-12">
+                    <button class="btn btn-primary col-12 mb-3" type="submit" name="submit">Add Item</button>
+                </div>
 
-                        header("Refresh:0");
-                        ob_end_flush();
-                        exit();
-                    }
-
-                    ?>
-
-                </tbody>
-
-            </table>
+            </form>
 
         </div>
 
-        <!-- Footer -->
+        <?php
+
+        if (isset($_POST["submit"])) {
+
+            $title = $_POST["title"];
+            $Author_Name = $_POST["Author_Name"];
+            $Cover_Image = $_POST["Cover_Image"];
+            $state = $_POST["state"];
+            $status = $_POST["status"];
+            $category = $_POST["category"];
+            $Edition_Date = $_POST["Edition_Date"];
+
+            $sqlQuery = "INSERT INTO `item` (Item_Code, Title, Author_Name, Cover_Image, `State`, Edition_Date, Purchase_Date, `Status`, Category, Nickname)
+                         VALUES ('$title', '$Author_Name', '$Cover_Image', '$state', '$Edition_Date', Now(), '$status', '$category');
+            ";
+
+            $statement = $conn->prepare($sqlQuery);
+            $statement->execute();
+        }
+
+        ?>
+
+        <!-- ::::::::::::::::::::::::::::::::::: Footer (Copyright, social media icons) ::::::::::::::::::::::::::::::::::: -->
 
         <?php include "footer.php" ?>
 

@@ -1,6 +1,5 @@
 <?php
 
-ob_start();
 include "connection.php";
 $id = $_GET['id'];
 
@@ -32,7 +31,7 @@ $id = $_GET['id'];
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid">
                     <img src="images/logo.png" class="d-inline-block align-top mx-3 logo" alt="logo">
-                    <a class="navbar-brand text-white" href="index.php">Solibrary</a>
+                    <a class="navbar-brand text-white">Solibrary</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -40,7 +39,7 @@ $id = $_GET['id'];
                         <div class="navbar-nav">
                             <a class="nav-link text-white" aria-current="page" href="admin.php?id=<?php echo $id; ?>">Home</a>
                             <a class="nav-link text-white" href="index.php">Contact</a>
-                            <a class="nav-link text-white" href="aboutMembers.php">About</a>
+                            <a class="nav-link text-white" href="aboutMembers.php?id=<?php echo $id; ?>">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon text-white"></span>
@@ -105,63 +104,52 @@ $id = $_GET['id'];
 
         <div class="down-arrow" onclick="scrollDown()"></div>
 
-        <!-- Container -->
+        <!-- ::::::::::::::::::::::::::::::::::: Cards container (Search, Cards, Pagination) ::::::::::::::::::::::::::::::::::: -->
 
         <div class="container">
-
             <table class="table border mt-3">
 
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Nickname</th>
-                        <th>Full Name</th>
-                        <th>Email</th>
-                        <th>Creation Date</th>
-                        <th>Add as admin</th>
+                        <th>Item reserved</th>
+                        <th>Reservation date</th>
+                        <th>Reservation expiration date</th>
                     </tr>
                 </thead>
 
                 <tbody>
 
                     <?php
-                    $statement = $conn->prepare("SELECT * FROM `members` WHERE `Admin` = 0");
+
+                    $statement = $conn->prepare("SELECT * FROM `reservation`");
                     $statement->execute();
-                    $members = $statement->fetchAll();
+                    $reservations = $statement->fetchAll();
 
-                    foreach ($members as $member) {
+                    foreach ($reservations as $reservation) {
 
-                        $idMember = $member['id'];
                         echo "<tr>";
-                        echo "<td>" . $idMember . "</td>";
-                        echo "<td>" . $member['Nickname'] . "</td>";
-                        echo "<td>" . $member['Full_Name'] . "</td>";
-                        echo "<td>" . $member['Email'] . "</td>";
-                        echo "<td>" . $member['Creation_Date'] . "</td>";
-                        echo "<td><form method='POST'><input type='hidden' name='idMember' value='$idMember'><button class='btn btn-primary' name='addAdmin'>Add as admin</button></form></td>";
+                            echo "<td>" . $reservation['Nickname'] . "</td>";
+                            echo "<td>";
+                            // $nickname = $reservation['Nickname'];
+                            // $statement = $conn->prepare("SELECT * FROM `item` WHERE `Nickname` = '$nickname'");
+                            // $statement->execute();
+                            // $item = $statement->fetch();
+                            echo $reservation['Item_Code'] . "</td>";
+                            echo "<td>" . $reservation['Reservation_Date'] . "</td>";
+                            echo "<td>" . $reservation['Reservation_Expiration_Date'] . "</td>";
                         echo "</tr>";
                     }
 
-                    if (isset($_POST["addAdmin"])) {
-
-                        $idMember = $_POST["idMember"];
-                        $statement = $conn->prepare("UPDATE `members` SET `Admin` = 1 WHERE `id` = '$idMember'");
-                        $statement->execute();
-
-                        header("Refresh:0");
-                        ob_end_flush();
-                        exit();
-                    }
 
                     ?>
-
                 </tbody>
 
             </table>
 
         </div>
 
-        <!-- Footer -->
+        <!-- ::::::::::::::::::::::::::::::::::: Footer (Copyright, social media icons) ::::::::::::::::::::::::::::::::::: -->
 
         <?php include "footer.php" ?>
 
