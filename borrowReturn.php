@@ -107,15 +107,16 @@ $id = $_GET['id'];
         <!-- ::::::::::::::::::::::::::::::::::: Cards container (Search, Cards, Pagination) ::::::::::::::::::::::::::::::::::: -->
 
         <div class="container">
+
             <table class="table border mt-3">
 
                 <thead>
                     <tr>
                         <th>Nickname</th>
-                        <th>Item reserved</th>
-                        <th>Reservation date</th>
-                        <th>Reservation expiration date</th>
-                        <th>Mark as borrowed</th>
+                        <th>Borrowing date</th>
+                        <th>Item borrowed</th>
+                        <th>Returning date</th>
+                        <th>Delete operation</th>
                     </tr>
                 </thead>
 
@@ -123,46 +124,40 @@ $id = $_GET['id'];
 
                     <?php
 
-                    $statement = $conn->prepare("SELECT * FROM `reservation`");
+                    $statement = $conn->prepare("SELECT * FROM `borrowings`");
                     $statement->execute();
-                    $reservations = $statement->fetchAll();
+                    $borrowings = $statement->fetchAll();
 
-                    foreach ($reservations as $reservation) {
+                    foreach ($borrowings as $borrowing) {
 
                         echo "<tr>";
-                        echo "<td>" . $reservation['Nickname'] . "</td>";
+                        echo "<td>" . $borrowing['Nickname'] . "</td>";
+                        echo "<td>" . $borrowing['Borrowing_Date'] . "</td>";
                         echo "<td>";
 
-                        $item_code = $reservation['Item_Code'];
-                        $resId = $reservation['Reservation_Code'];
+                        $item_code = $borrowing['Item_Code'];
+                        $borrId = $borrowing['Borrowing_Code'];
 
                         $statement = $conn->prepare("SELECT * FROM `item` WHERE `Item_Code` = $item_code");
                         $statement->execute();
                         $item = $statement->fetch();
 
                         echo $item["Title"] . "</td>";
-                        echo "<td>" . $reservation['Reservation_Date'] . "</td>";
-                        echo "<td>" . $reservation['Reservation_Expiration_Date'] . "</td>";
-                        echo "<td><form method='POST'><input type='hidden' name='resCode' value='$resId'><button class='btn btn-primary' name='borrowed'>Mark as borrowed</button></form></td>";
+
+                        echo "<td><input type='date' class='form-control' name='returnDate'></td>";
+
+                        echo "<td><form method='POST'><input type='hidden' name='borrowingCode' value='$borrId'><button class='btn btn-primary' name='done'>Done</button></form></td>";
                         echo "</tr>";
                     }
 
-                    if (isset($_POST["borrowed"])) {
+                    if (isset($_POST["done"])) {
 
-                        $resCode = $_POST["resCode"];
+                        $borrowingCode = $_POST["borrowingCode"];
+                        $borrowDate = $borrowing['Borrowing_Date'];
+                        $returnDate = $_POST["returnDate"];
 
-                        $statement = $conn->prepare("SELECT * FROM `reservation` WHERE Reservation_Code = '$resCode'");
-                        $statement->execute();
-                        $toGetNickname = $statement->fetch(PDO::FETCH_ASSOC);
-                        $nickname = $toGetNickname["Nickname"];
-
-                        $borrowDate = date("Y-m-d H:i:s");
-
-                        $statement = $conn->prepare("INSERT INTO `borrowings` (Borrowing_Date, Borrowing_Return_Date, Item_Code, Nickname, Reservation_Code) VALUES ('$borrowDate', NULL, '$item_code', '$nickname', '$resCode')");
-                        $statement->execute();
-
-                        $statement = $conn->prepare("DELETE FROM `reservation` WHERE `Reservation_Code` = :resCode");
-                        $statement->bindParam(":resCode", $resCode);
+                        $statement = $conn->prepare("DELETE FROM `borrowings` WHERE `Borrowing_Code` = :borrowingCode");
+                        $statement->bindParam(":borrowingCode", $borrowingCode);
                         $statement->execute();
 
                     }
@@ -172,7 +167,7 @@ $id = $_GET['id'];
                 </tbody>
 
             </table>
-
+            
         </div>
 
         <!-- ::::::::::::::::::::::::::::::::::: Footer (Copyright, social media icons) ::::::::::::::::::::::::::::::::::: -->
