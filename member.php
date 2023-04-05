@@ -3,6 +3,12 @@
 include "connection.php";
 $id = $_GET['id'];
 
+$statement = $conn->prepare("DELETE FROM `reservation` WHERE `Reservation_Expiration_Date` < NOW()");
+$statement->execute();
+
+$statement = $conn->prepare("DELETE FROM `borrowings` WHERE `Reservation_Code` IN (SELECT `Reservation_Code` FROM `reservation` WHERE `Reservation_Expiration_Date` < NOW())");
+$statement->execute();
+
 ?>
 
 <!DOCTYPE html>
@@ -53,11 +59,11 @@ $id = $_GET['id'];
                         <button class="btn btn-secondary dropdown-toggle bg-transparent border-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <?php
 
-                                $statement = $conn->prepare("SELECT * FROM `members` WHERE id = $id");
-                                $statement->execute();
-                                $memberDetails = $statement->fetch();
+                            $statement = $conn->prepare("SELECT * FROM `members` WHERE id = $id");
+                            $statement->execute();
+                            $memberDetails = $statement->fetch();
 
-                                echo $memberDetails['Nickname'];
+                            echo $memberDetails['Nickname'];
 
                             ?>
                         </button>
@@ -82,7 +88,7 @@ $id = $_GET['id'];
                     <li class="nav-item">
                         <a class="nav-link" href="#">About</a>
                     </li>
-                    <li class="nav-item">   
+                    <li class="nav-item">
                         <a class="nav-link" href="#">Explore</a>
                     </li>
                 </ul>
@@ -176,26 +182,46 @@ $id = $_GET['id'];
                         </div>
                         <div class="col-md-8">
                             <div class="card-body text-start" <?php $id = $item['Item_Code']; ?>>
-                                <h5 class="card-title"><span class="fw-bold" style="max-width: 600px;">Title:</span> <?php echo $item['Title']; ?></h5>
-                                <p class="card-text">
-                                    <span class="fw-bold">Status:</span> <?php echo $item['Status']; ?><br>
-                                    <span class="fw-bold">Author:</span> <?php echo $item['Author_Name']; ?><br>
-                                    <span class="fw-bold">Category:</span> <?php
-                                                                            $categoryId = $item['Category_Code'];
-                                                                            $statement = $conn->prepare("SELECT * FROM `category` WHERE `Category_Code` = $categoryId");
-                                                                            $statement->execute();
-                                                                            $category = $statement->fetch();
-                                                                            echo $category['Category_Name'];
-                                                                            ?>
-                                </p>
-                                <a class="btn border rounded-pill px-5" href="details.php?id=<?php echo $id; ?>">Details</a>
-                                <button class="btn btn-primary border rounded-pill px-5" id="reserve">Reserve</button>
+                                <form method="POST">
+                                    <h5 class="card-title"><span class="fw-bold" style="max-width: 600px;">Title:</span> <?php echo $item['Title']; ?></h5>
+                                    <p class="card-text">
+                                        <span class="fw-bold">Status:</span> <?php echo $item['Status']; ?><br>
+                                        <span class="fw-bold">Author:</span> <?php echo $item['Author_Name']; ?><br>
+                                        <span class="fw-bold">Category:</span> <?php
+                                                                                $categoryId = $item['Category_Code'];
+                                                                                $statement = $conn->prepare("SELECT * FROM `category` WHERE `Category_Code` = $categoryId");
+                                                                                $statement->execute();
+                                                                                $category = $statement->fetch();
+                                                                                echo $category['Category_Name'];
+                                                                                ?>
+                                    </p>
+                                    <a class="btn border rounded-pill px-5" href="details.php?id=<?php echo $id; ?>">Details</a>
+                                    <input type="hidden" name="item_id" value="<?php echo $id ?>">
+                                    <button class="btn btn-primary border rounded-pill px-5" id="reserve" name="reserve">Reserve</button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
 
-            <?php }; ?>
+            <?php
+
+            };
+
+            if (isset($_POST["reserve"])) {
+
+                $ResDate = date("Y-m-d H:i:s");
+                $ResExpDate = date("Y-m-d H:i:s", strtotime("+1 days"));
+
+                $nickname = $memberDetails['Nickname'];
+                $item_id = $_POST['item_id'];
+
+                $statement = $conn->prepare("INSERT INTO `reservation` (Reservation_Date, Reservation_Expiration_Date, Item_Code, Nickname) VALUES (?, ?, ?, ?)");
+                $statement->execute([$ResDate, $ResExpDate, $item_id, $nickname]);
+
+            }
+            
+            ?>
 
         </div>
 

@@ -96,7 +96,7 @@ include "connection.php";
             <div class="container">
                 <div class="row">
                     <div class="col-5">
-                        <h1 class="text-white text-wrap mb-4" onclick="testiWsf()">Discover your favorite books, magazines, novels and more with us!</h1>
+                        <h1 class="text-white text-wrap mb-4">Discover your favorite books, magazines, novels and more with us!</h1>
                         <a href="signup.php" class="btn btn-warning btn-lg rounded-pill p-2"><span class="p-4 headerSUbtn">Sign up for free!</span></a>
                     </div>
                 </div>

@@ -184,7 +184,7 @@ $id = $_GET['id'];
             $category = $_POST["category"];
             $Edition_Date = $_POST["Edition_Date"];
 
-            $sqlQuery = "INSERT INTO `item` (Item_Code, Title, Author_Name, Cover_Image, `State`, Edition_Date, Purchase_Date, `Status`, Category, Nickname)
+            $sqlQuery = "INSERT INTO `item` (Title, Author_Name, Cover_Image, `State`, Edition_Date, Purchase_Date, `Status`, Category)
                          VALUES ('$title', '$Author_Name', '$Cover_Image', '$state', '$Edition_Date', Now(), '$status', '$category');
             ";
 

@@ -24,7 +24,7 @@
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid">
                     <img src="images/logo.png" class="d-inline-block align-top mx-3 logo" alt="logo">
-                    <a class="navbar-brand text-white" href="index.php">IQRAE Library</a>
+                    <a class="navbar-brand text-white" href="index.php">Solibrary</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -70,7 +70,7 @@
 
                 <h3 class="text-center my-3 pt-2">Join now and start exploring!</h3>
 
-                <form action="member.php?<?php  ?>" method="POST" class="row g-3 needs-validation px-5 mt-1" novalidate>
+                <form method="POST" class="row g-3 needs-validation px-5 mt-1" novalidate>
 
 
                     <div class="col-md-4">
@@ -180,17 +180,12 @@
                     $Occupation = $_POST["occupation"];
                     $Birth_date = $_POST["birthDate"];
 
-                    $query = "INSERT INTO `members` (`id`, `Nickname`, `Full_Name`, `Password`, `Admin`, `Address`, `Email`, `Phone`, `CIN`, `Occupation`, `Penalty_Count`, `Birth_Date`, `Creation_Date`) VALUES (NULL, '$Nickname', '$Full_Name', '$Password', '0', '$address', '$Email', '$Phone', '$LaCarte', '$Occupation', '0', '$Birth_date', Now())";
+                    $hashed_password = password_hash($Password, PASSWORD_DEFAULT);
 
-                    $statement = $conn->prepare($query);
-                    $statement->execute();
+                    $statement = $conn->prepare("INSERT INTO `members` (`Nickname`, `Full_Name`, `Password`, `Admin`, `Address`, `Email`, `Phone`, `CIN`, `Occupation`, `Penalty_Count`, `Birth_Date`, `Creation_Date`) VALUES (?, ?, ?, 0, ?, ?, ?, ?, ?, 0, ?, Now())");
+                    $statement->execute([$Nickname, $Full_Name, $hashed_password, $address, $Email, $Phone, $LaCarte, $Occupation, $Birth_date]);
 
-                    $email = $_POST["email"];
-                    $password = $_POST["password"];
-
-                    $statement = $conn->prepare("SELECT * FROM `members` WHERE '$email' LIKE `Email` AND '$password' LIKE `Password`");
-                    $statement->execute();
-                    $rowCount = $statement->rowCount();
+                    echo '<script>window.location.href = "signin.php";</script>';
                 }
 
                 ?>

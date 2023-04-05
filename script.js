@@ -55,24 +55,24 @@ function scrollDown() {
 //   }
 // };
 
-document.addEventListener('DOMContentLoaded', function () {
-  let reserveButton = document.getElementById('reserve');
-  reserveButton.addEventListener('click', function () {
-    reserveButton.classList.add('onclic');
+document.addEventListener("DOMContentLoaded", function () {
+  let reserveButton = document.getElementById("reserve");
+  reserveButton.addEventListener("click", function () {
+    reserveButton.classList.add("onclic");
     validate();
   });
 
   function validate() {
     setTimeout(function () {
-      reserveButton.classList.remove('onclic');
-      reserveButton.classList.add('validate');
+      reserveButton.classList.remove("onclic");
+      reserveButton.classList.add("validate");
       callback();
     }, 2250);
   }
 
   function callback() {
     setTimeout(function () {
-      reserveButton.classList.remove('validate');
+      reserveButton.classList.remove("validate");
     }, 1250);
   }
 });
