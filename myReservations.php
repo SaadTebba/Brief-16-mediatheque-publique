@@ -30,15 +30,15 @@ include "connection.php";
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid">
                     <img src="images/logo.png" class="d-inline-block align-top mx-3 logo" alt="logo">
-                    <a class="navbar-brand text-white" href="index.php">Solibrary</a>
+                    <a class="navbar-brand text-white">Solibrary</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
-                            <a class="nav-link text-white" aria-current="page" href="index.php">Home</a>
-                            <a class="nav-link text-white" href="member.php">Contact</a>
-                            <a class="nav-link text-white" href="aboutVisitor.php">About</a>
+                            <a class="nav-link text-white" aria-current="page" href="member.php?id=<?php echo $id; ?>">Home</a>
+                            <a class="nav-link text-white" href="member.php?id=<?php echo $id; ?>">Contact</a>
+                            <a class="nav-link text-white" href="aboutMembers.php?id=<?php echo $id; ?>">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon text-white"></span>
@@ -97,7 +97,6 @@ include "connection.php";
                 <div class="row">
                     <div class="col-5">
                         <h1 class="text-white text-wrap mb-4">Discover your favorite books, magazines, novels and more with us!</h1>
-                        <a href="signup.php" class="btn btn-warning btn-lg rounded-pill p-2"><span class="p-4 headerSUbtn">Sign up for free!</span></a>
                     </div>
                 </div>
             </div>

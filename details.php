@@ -30,8 +30,8 @@
         $statement->execute();
         $items = $statement->fetchAll();
 
-        foreach ($items as $item) { // "SELECT items.*, categories.name FROM items JOIN categories ON items.category_code = categories.code"
-
+        foreach ($items as $item) { 
+            
         ?>
 
             <div class="card mx-auto my-5">

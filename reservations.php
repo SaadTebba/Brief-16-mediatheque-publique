@@ -38,7 +38,7 @@ $id = $_GET['id'];
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a class="nav-link text-white" aria-current="page" href="admin.php?id=<?php echo $id; ?>">Home</a>
-                            <a class="nav-link text-white" href="index.php">Contact</a>
+                            <a class="nav-link text-white" href="admin.php?id=<?php echo $id; ?>">Contact</a>
                             <a class="nav-link text-white" href="aboutMembers.php?id=<?php echo $id; ?>">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

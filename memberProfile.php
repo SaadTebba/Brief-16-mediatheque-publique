@@ -39,7 +39,7 @@ $id = $_GET['id'];
                         <div class="navbar-nav">
                             <a class="nav-link text-white" aria-current="page" href="member.php?id=<?php echo $id; ?>">Home</a>
                             <a class="nav-link text-white" href="member.php?id=<?php $_GET["id"] ?>">Contact</a>
-                            <a class="nav-link text-white" href="aboutMembers.php">About</a>
+                            <a class="nav-link text-white" href="aboutMembers.php?id=<?php echo $id; ?>">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon text-white"></span>
@@ -94,7 +94,6 @@ $id = $_GET['id'];
                 <div class="row">
                     <div class="col-5">
                         <h1 class="text-white text-wrap mb-4" onclick="testiWsf()">Discover your favorite books, magazines, novels and more with us!</h1>
-                        <a href="signup.php" class="btn btn-warning btn-lg rounded-pill p-2"><span class="p-4 headerSUbtn">Sign up for free!</span></a>
                     </div>
                 </div>
             </div>

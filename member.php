@@ -44,7 +44,7 @@ $statement->execute();
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a class="nav-link text-white" aria-current="page" href="member.php?id=<?php echo $id; ?>">Home</a>
-                            <a class="nav-link text-white" href="index.php">Contact</a>
+                            <a class="nav-link text-white" href="member.php?id=<?php echo $id; ?>">Contact</a>
                             <a class="nav-link text-white" href="aboutMembers.php?id=<?php echo $id; ?>">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -204,23 +204,46 @@ $statement->execute();
                     </div>
                 </div>
 
-            <?php
+                <?php
 
             };
 
             if (isset($_POST["reserve"])) {
 
-                $ResDate = date("Y-m-d H:i:s");
-                $ResExpDate = date("Y-m-d H:i:s", strtotime("+1 days"));
+                if ($item['Status'] == 'Available') {
 
-                $nickname = $memberDetails['Nickname'];
-                $item_id = $_POST['item_id'];
+                    $ResDate = date("Y-m-d H:i:s");
+                    $ResExpDate = date("Y-m-d H:i:s", strtotime("+1 days"));
 
-                $statement = $conn->prepare("INSERT INTO `reservation` (Reservation_Date, Reservation_Expiration_Date, Item_Code, Nickname) VALUES (?, ?, ?, ?)");
-                $statement->execute([$ResDate, $ResExpDate, $item_id, $nickname]);
+                    $nickname = $memberDetails['Nickname'];
+                    $item_id = $_POST['item_id'];
 
+                    $statement = $conn->prepare("INSERT INTO `reservation` (Reservation_Date, Reservation_Expiration_Date, Item_Code, Nickname) VALUES (?, ?, ?, ?)");
+                    $statement->execute([$ResDate, $ResExpDate, $item_id, $nickname]);
+                } else { ?>
+
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Item Not Available</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Sorry, the item you selected is not available at the moment. Please try again later.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script> $(document).ready(function() { $('#myModal').modal('show'); }); </script>
+
+            <?php }
             }
-            
+
             ?>
 
         </div>

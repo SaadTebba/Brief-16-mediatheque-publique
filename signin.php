@@ -27,7 +27,7 @@ include "connection.php";
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid">
                     <img src="images/logo.png" class="d-inline-block align-top mx-3 logo" alt="logo">
-                    <a class="navbar-brand text-white" href="index.php">Solibrary</a>
+                    <a class="navbar-brand text-white">Solibrary</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -108,14 +108,21 @@ include "connection.php";
                             $result = $statement->fetch();
 
                             if ($result["Admin"] == 1) {
-                                header("Location: admin.php?".'id='.$result["id"]);
+                                if ($result["Penalty_Count"] >= 3) {
+                                    header("Location: accountLocked.php?" . 'id=' . $result["id"]);
+                                } else {
+                                    header("Location: admin.php?" . 'id=' . $result["id"]);
+                                }
                             } else {
-                                header("Location: member.php?".'id='.$result["id"]);
+                                if ($result["Penalty_Count"] >= 3) {
+                                    header("Location: accountLocked.php?" . 'id=' . $result["id"]);
+                                } else {
+                                    header("Location: member.php?" . 'id=' . $result["id"]);
+                                }
                             }
 
                             ob_end_flush();
                             exit();
-
                         } else {
                             echo '<p class="text-center link-danger fw-bolder h4 text-decoration-underline">Access denied due to incorrect login details.</p>';
                         }

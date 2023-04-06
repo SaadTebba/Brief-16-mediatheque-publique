@@ -1,4 +1,9 @@
-<?php include "connection.php"; ?>
+<?php
+
+include "connection.php";
+$id = $_GET['id'];
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +18,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="style.css?<?=time();?>">
+    <link rel="stylesheet" type="text/css" href="style.css?<?= time(); ?>">
 </head>
 
 <body>
@@ -28,19 +33,37 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link text-white" aria-current="page" href="index.php">Home</a>
-                        <a class="nav-link text-white" href="index.php">Contact</a>
-                        <a class="nav-link text-white" href="aboutVisitor.php">About</a>
+                        <a class="nav-link text-white" aria-current="page" href="accountLocked.php?id=<?php echo $id; ?>">Home</a>
+                        <a class="nav-link text-white" href="accountLocked.php?id=<?php echo $id; ?>">Contact</a>
+                        <a class="nav-link text-white" href="accountLocked.php?id=<?php echo $id; ?>">About</a>
                         <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon text-white"></span>
                         </button>
                     </div>
                 </div>
-                <i class="fa-solid fa-user text-white p-2"></i>
-                <a href="signup.php" class="text-white text-decoration-none me-3">Sign up</a>
-                <i class="fa-sharp fa-solid fa-right-to-bracket text-white p-2"></i>
-                <a href="signin.php" class="text-white text-decoration-none me-3">Sign in</a>
+
+                <!-- Profile dropdown -->
+
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle bg-transparent border-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?php
+
+                        $statement = $conn->prepare("SELECT * FROM `members` WHERE id = $id");
+                        $statement->execute();
+                        $memberDetails = $statement->fetch();
+
+                        echo $memberDetails['Nickname'];
+
+                        ?>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="accountLocked.php?id=<?php echo $id; ?>">Profile</a></li>
+                        <li><a class="dropdown-item" href="accountLocked.php?id=<?php echo $id; ?>">My Reservations</a></li>
+                        <li><a class="dropdown-item" href="index.php">Log out</a></li>
+                    </ul>
+                </div>
+
             </div>
         </nav>
 
@@ -64,7 +87,7 @@
 
     <div id="backgroundImg" class="d-flex align-items-center">
         <div class="container text-center">
-                    <h1 class="text-white">Welcome to our media library! We're a community of book lovers who believe in the power of reading and sharing knowledge. Our library offers a wide selection of books, magazines, and other media that you can borrow and enjoy.</h1>
+            <h1 class="text-white">Please be advised that your account has been suspended as you have reached the maximum allowable limit of penalties, which is 3.</h1>
         </div>
     </div>
 

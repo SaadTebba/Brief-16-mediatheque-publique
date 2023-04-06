@@ -38,7 +38,7 @@ $id = $_GET['id'];
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a class="nav-link text-white" aria-current="page" href="admin.php?id=<?php echo $id; ?>">Home</a>
-                            <a class="nav-link text-white" href="index.php">Contact</a>
+                            <a class="nav-link text-white" href="admin.php?id=<?php echo $id; ?>">Contact</a>
                             <a class="nav-link text-white" href="aboutMembers.php?id=<?php echo $id; ?>">About</a>
                             <a class="nav-link text-white explore" onclick="scrollDown()">Explore</a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -116,7 +116,7 @@ $id = $_GET['id'];
                         <th>Borrowing date</th>
                         <th>Item borrowed</th>
                         <th>Returning date</th>
-                        <th>Delete operation</th>
+                        <th>Confirm Return</th>
                     </tr>
                 </thead>
 
@@ -144,17 +144,28 @@ $id = $_GET['id'];
 
                         echo $item["Title"] . "</td>";
 
-                        echo "<td><input type='date' class='form-control' name='returnDate'></td>";
+                        echo "<td><form method='POST'><input type='date' class='form-control' name='returnDate' required></td>";
 
-                        echo "<td><form method='POST'><input type='hidden' name='borrowingCode' value='$borrId'><button class='btn btn-primary' name='done'>Done</button></form></td>";
+                        echo "<td><input type='hidden' name='borrowingCode' value='$borrId'><button class='btn btn-primary' name='done'>Confirm Return</button></form></td>";
                         echo "</tr>";
                     }
 
                     if (isset($_POST["done"])) {
 
                         $borrowingCode = $_POST["borrowingCode"];
-                        $borrowDate = $borrowing['Borrowing_Date'];
                         $returnDate = $_POST["returnDate"];
+                        $borrowDate = $borrowing['Borrowing_Date'];
+                        $nickname = $borrowing['Nickname'];
+
+                        $borrowingDateObj = new DateTime($borrowDate);
+                        $returnDateObj = new DateTime($returnDate);
+                        $daysDifference = $borrowingDateObj->diff($returnDateObj)->days;
+
+                        if ($daysDifference > 15) {
+                            $statement = $conn->prepare("UPDATE `members` SET `Penalty_Count` = Penalty_Count + 1 WHERE `Nickname` = '$nickname'");
+                            $statement->execute();
+                        }
+
 
                         $statement = $conn->prepare("DELETE FROM `borrowings` WHERE `Borrowing_Code` = :borrowingCode");
                         $statement->bindParam(":borrowingCode", $borrowingCode);
@@ -162,12 +173,11 @@ $id = $_GET['id'];
 
                     }
 
-
                     ?>
                 </tbody>
 
             </table>
-            
+
         </div>
 
         <!-- ::::::::::::::::::::::::::::::::::: Footer (Copyright, social media icons) ::::::::::::::::::::::::::::::::::: -->
