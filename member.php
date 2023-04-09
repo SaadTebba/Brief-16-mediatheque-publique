@@ -215,6 +215,7 @@ $statement->execute();
                     $ResDate = date("Y-m-d H:i:s");
                     $ResExpDate = date("Y-m-d H:i:s", strtotime("+1 days"));
 
+                    
                     $nickname = $memberDetails['Nickname'];
                     $item_id = $_POST['item_id'];
 
